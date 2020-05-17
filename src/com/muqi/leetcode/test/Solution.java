@@ -472,4 +472,92 @@ public class Solution {
         if(i==j) return true;
         return false;
     }
+
+    //32-1
+//    public int[] levelOrder(TreeNode root) {
+//        if(root == null) return int[0];
+//        Queue<TreeNode> q = new LinkedList<>();
+//        ArrayList<Integer> list = new ArrayList<>();
+//        q.add(root);
+//        while(!q.isEmpty()) {
+//            TreeNode p = q.poll();
+//            list.add(p.val);
+//            if(p.left != null) q.add(p.left);
+//            if(p.right != null) q.add(p.right);
+//        }
+//        int[] res = new int[list.size()];
+//        for(int i=0;i<list.size();i++) {
+//            res[i] = list.get(i);
+//        }
+//        return res;
+//    }
+
+    //32-2
+//    public List<List<Integer>> levelOrder(TreeNode root) {
+//        Queue<TreeNode> q = new LinkedList<>();
+//        List<List<Integer>> res = new ArrayList<>();
+//        List<Integer> list = new ArrayList<>();
+//        q.add(null);
+//        if(root != null) q.add(root);
+//        while(!q.isEmpty()) {
+//            TreeNode p = q.poll();
+//            if(p == null && !q.isEmpty()) {
+//                list = new ArrayList<>();
+//                res.add(list);
+//                q.add(null);
+//            }
+//            else if(p != null){
+//                list.add(p.val);
+//                if(p.left != null) q.add(p.left);
+//                if(p.right != null) q.add(p.right);
+//            }
+//        }
+//        return res;
+//    }
+
+    //32-3
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        int cnt = 0;
+        q.add(null);
+        if(root != null) q.add(root);
+        while(!q.isEmpty()) {
+            TreeNode p = q.poll();
+            if(p == null && !q.isEmpty()) {
+                if(cnt>0 && cnt%2 == 0) Collections.reverse(list);
+                cnt++;
+                list = new ArrayList<>();
+                res.add(list);
+                q.add(null);
+            }
+            else if(p != null){
+                list.add(p.val);
+                if(p.left != null) q.add(p.left);
+                if(p.right != null) q.add(p.right);
+            }
+        }
+        return res;
+    }
+
+    //33
+    public boolean verifyPostorder(int[] postorder) {
+        return isCorrect(postorder,0,postorder.length-1);
+    }
+
+    private boolean isCorrect(int[] postorder, int l, int r) {
+        if(l>=r) return true;
+        int root = postorder[r];
+        int i=l;
+        while(i<r && postorder[i] < root) {
+            i++;
+        }
+        int j=i-1;
+        while(i<r && postorder[i] > root) {
+            i++;
+        }
+        if(i == r) return isCorrect(postorder,l,j) && isCorrect(postorder,j+1,r-1);
+        return false;
+    }
 }
