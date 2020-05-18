@@ -560,4 +560,65 @@ public class Solution {
         if(i == r) return isCorrect(postorder,l,j) && isCorrect(postorder,j+1,r-1);
         return false;
     }
+
+    //34
+    List<List<Integer>> res = new LinkedList<>();
+    LinkedList<Integer> list = new LinkedList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        preorder(root, sum);
+        return res;
+    }
+
+    private void preorder(TreeNode root, int sum) {
+        if(root == null) return;
+        sum -= root.val;
+        list.add(root.val);
+        if(sum == 0 && root.left == null && root.right == null) {
+            res.add(new LinkedList<>(list));
+        }
+        preorder(root.left, sum);
+        preorder(root.right, sum);
+        list.removeLast();
+    }
+
+    //35
+//    public Node copyRandomList(Node head) {
+//        Node root = new Node(0);
+//        Node t = head;
+//        Node p = root;
+//        Map<Node,Node> map = new HashMap<>();
+//        while(t != null) {
+//            Node q = new Node(t.val);
+//            p.next = q;
+//            map.put(t,q);
+//            t = t.next;
+//            p = q;
+//        }
+//        while(head != null) {
+//            if(head.random == null) map.get(head).random = null;
+//            else map.get(head).random = map.get(head.random);
+//            head = head.next;
+//        }
+//        return root.next;
+//    }
+
+    //36
+    Node pre,head;
+    public Node treeToDoublyList(Node root) {
+        if(root==null) return null;
+        inorder(root);
+        pre.right = head;
+        head.left = pre;
+        return head;
+    }
+
+    private void inorder(Node root) {
+        if(root == null) return;
+        inorder(root.left);
+        if(head == null) head = root;
+        if(pre!=null) pre.right = root;
+        root.left = pre;
+        pre = root;
+        inorder(root.right);
+    }
 }
