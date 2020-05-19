@@ -621,4 +621,35 @@ public class Solution {
         pre = root;
         inorder(root.right);
     }
+
+    //38
+    LinkedList<String> list1 = new LinkedList<>();
+    char[] c;
+    public String[] permutation(String s) {
+        c = s.toCharArray();
+        dfs(0);
+        return list1.toArray(new String[list1.size()]);
+    }
+
+    private void dfs(int x) {
+        if(c.length-1 == x) {
+            list1.add(String.valueOf(c));
+            return;
+        }
+        HashSet<Character> set = new HashSet<>();
+        for(int i=x;i<c.length;i++) {
+            if(set.contains(c[i])) continue;
+            set.add(c[i]);
+            swap(x,i);
+            dfs(x+1);
+            swap(x,i);
+        }
+    }
+
+    private void swap(int a, int b) {
+        char temp = c[a];
+        c[a] = c[b];
+        c[b] = temp;
+    }
+
 }
