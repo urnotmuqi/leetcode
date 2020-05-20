@@ -652,4 +652,69 @@ public class Solution {
         c[b] = temp;
     }
 
+    //39 摩尔投票法
+    public int majorityElement(int[] nums) {
+        int sum = 0,x = 0;
+        for(int n : nums) {
+            if(sum == 0) x = n;
+            sum += n == x ? 1 : -1;
+        }
+        return x;
+    }
+
+    //40
+//    // 计数排序
+//    public int[] getLeastNumbers(int[] arr, int k) {
+//        int min = arr[0],max = arr[0];
+//        for(int n : arr) {
+//            if(n<min) min = n;
+//            if(n>max) max = n;
+//        }
+//        int[] temp = new int[max-min+1];
+//        for(int n : arr) {
+//            temp[n-min]++;
+//        }
+//        int index = 0;
+//        for(int i=0;i<max-min+1;i++) {
+//            while(temp[i]-- != 0) {
+//                arr[index++] = i+min;
+//            }
+//        }
+//        int[] res = Arrays.copyOf(arr,k);
+//        return res;
+//    }
+    //快排
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if(k==0 || arr.length==0) return new int[0];
+        quick(arr,0,arr.length-1,k);
+        int[] res = Arrays.copyOf(arr,k);
+        return res;
+    }
+
+    private void quick(int[] arr, int l, int r, int k) {
+        int temp = arr[l];
+        int i=l, j=r;
+        while(i<j) {
+            while(arr[j] >= temp && i<j) j--;
+            if(arr[j]<temp) arr[i++] = arr[j];
+            while(arr[i] <= temp && i<j) i++;
+            if(arr[i]>temp) arr[j--] = arr[i];
+        }
+        arr[i] = temp;
+        if(i-l+1 == k) return;
+        else if(i-l+1 < k) quick(arr, i+1,r,k-(i-l+1));
+        else quick(arr,l,i-1,k);
+    }
+
+    //42
+    public int maxSubArray(int[] nums) {
+        int sum = 0;
+        int max = nums[0];
+        for(int i=0;i<nums.length;i++) {
+            sum += nums[i];
+            if(sum<0) sum = 0;
+            if(sum>max) max = sum;
+        }
+        return sum;
+    }
 }
