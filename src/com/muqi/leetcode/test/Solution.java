@@ -717,4 +717,77 @@ public class Solution {
         }
         return sum;
     }
+
+    //43
+    public int countDigitOne(int n) {
+        int digit = 1,high = n/10,low = 0,cur = n%10;
+        int res = 0;
+        while(cur!=0 || high != 0) {
+            if(cur == 0) {
+                res += high*digit;
+            }
+            else if(cur == 1) {
+                res += high*digit + low + 1;
+            }
+            else {
+                res += (high + 1)*digit;
+            }
+            cur = high %10;
+            digit *= 10;
+            high /= 10;
+            low = n%digit;
+        }
+        return res;
+    }
+
+    //44
+    public int findNthDigit(int n) {
+        int digit = 1;
+        long start = 1;
+        while(( n- digit*start*9)>0) {
+            n -= digit*start*9;
+            digit ++;
+            start *= 10;
+        }
+        int cnt = n/digit;
+        n -= cnt*digit;
+        if(n>0) cnt++;
+        long num = start+cnt-1;
+        return (int)num/(int)Math.pow(10,(digit-n)%digit)%10;
+    }
+
+    //53-1
+    //二分法
+//    public int search(int[] nums, int target) {
+//        int l = 0, r = nums.length-1;
+//        while(l<=r) {
+//            int mid = (l+r)/2;
+//            if(nums[mid] >= target) {
+//                r = mid-1;
+//            }
+//            else l = mid+1;
+//        }
+//        int leftBound = l;
+//        l = 0;
+//        r = nums.length-1;
+//        while(l<=r) {
+//            int mid = (l+r)/2;
+//            if(nums[mid] > target)  r=mid-1;
+//            else l=mid+1;
+//        }
+//        return r-leftBound+1;
+//    }
+    public int search(int[] nums, int target) {
+        return binarySearch(nums,target+0.5)-binarySearch(nums,target-0.5);
+    }
+    private int binarySearch(int[] nums, double target) {
+        int l = 0, r = nums.length-1;
+        while(l<=r) {
+            int mid = (l+r)/2;
+            if(nums[mid]>target) r = mid-1;
+            else l = mid+1;
+        }
+        return l;
+    }
+
 }
