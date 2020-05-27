@@ -756,6 +756,34 @@ public class Solution {
         return (int)num/(int)Math.pow(10,(digit-n)%digit)%10;
     }
 
+    //45
+    public String minNumber(int[] nums) {
+        String[] strs = new String[nums.length];
+        for(int i=0;i<nums.length;i++) {
+            strs[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strs,(x, y)->(x + y).compareTo(y + x));
+        StringBuilder res = new StringBuilder();      //这里用StringBuilder 比用 StringBuffer 快
+        for(String s : strs) {
+            res.append(s);
+        }
+        return res.toString();
+    }
+
+    //46
+    public int translateNum(int num) {
+        char[] chx = String.valueOf(num).toCharArray();
+        return divide(chx);
+    }
+
+    private int divide(char[] chx) {
+        if(chx.length == 1) return 1;
+        int a = chx[0]-'0';
+        int b = chx[1]-'0'+a*10;
+        if(b>=10 && b<=25) return divide(Arrays.copyOfRange(chx,1,chx.length)) + divide(Arrays.copyOfRange(chx,2,chx.length));
+        return divide(Arrays.copyOfRange(chx,1,chx.length));
+    }
+
     //53-1
     //二分法
 //    public int search(int[] nums, int target) {
