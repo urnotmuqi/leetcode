@@ -784,6 +784,32 @@ public class Solution {
         return divide(Arrays.copyOfRange(chx,1,chx.length));
     }
 
+    //47
+    public int maxValue(int[][] grid) {
+        int[][] res = new int[grid.length][grid[0].length];
+        for(int i=0;i<grid.length;i++) {
+            for(int j=0;j<grid[i].length;j++) {
+                if(i==0 && j==0) res[i][j] = grid[i][j];
+                else if(j==0) res[i][j] = res[i-1][j] + grid[i][j];
+                else if(i==0) res[i][j] = grid[i][j] + res[i][j-1];
+                else res[i][j] = Math.max(res[i-1][j], res[i][j-1]) + grid[i][j];
+            }
+        }
+        return res[grid.length-1][grid[0].length-1];
+    }
+
+    //50
+    public char firstUniqChar(String s) {
+        int[] count = new int[26];
+        for(char c : s.toCharArray()) {
+            count[c-'a']++;
+        }
+        for(char c : s.toCharArray()) {
+            if(count[c-'a'] == 1) return c;
+        }
+        return ' ';
+    }
+
     //53-1
     //二分法
 //    public int search(int[] nums, int target) {
