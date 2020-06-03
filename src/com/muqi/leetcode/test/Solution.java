@@ -798,6 +798,35 @@ public class Solution {
         return res[grid.length-1][grid[0].length-1];
     }
 
+    //48
+    public int lengthOfLongestSubstring(String s) {
+        HashMap<Character,Integer> map = new HashMap();
+        int i=-1,res=0;
+        for(int j=0;j<s.length();j++) {
+            if(map.containsKey(s.charAt(j))) {
+                i = Math.max(i,map.get(s.charAt(j)));
+            }
+            map.put(s.charAt(j),j);
+            res = Math.max(res,j-i);
+        }
+        return res;
+    }
+
+    //49
+    public int nthUglyNumber(int n) {
+        int[] dp = new int[n];
+        dp[0] = 1;
+        int a=0,b=0,c=0;
+        for(int i=1;i<n;i++) {
+            int n2=dp[a]*2, n3=dp[b]*3, n5=dp[c]*5;
+            dp[i] = Math.min(Math.min(n2,n3),n5);
+            if(dp[i] == n2) a++;
+            if(dp[i] == n3) b++;
+            if(dp[i] == n5) c++;
+        }
+        return dp[n-1];
+    }
+
     //50
     public char firstUniqChar(String s) {
         int[] count = new int[26];
@@ -808,6 +837,62 @@ public class Solution {
             if(count[c-'a'] == 1) return c;
         }
         return ' ';
+    }
+
+    //51
+    public int reversePairs(int[] nums) {
+        int[] temp = new int[nums.length];
+        if(nums.length < 2) {
+            return 0;
+        }
+        return reversePairs(nums, 0, nums.length-1, temp);
+    }
+
+    private int reversePairs(int[] nums, int left, int right, int[] temp) {
+        if(left == right) {
+            return 0;
+        }
+        int mid = (left + right) / 2;
+        int leftPairs = reversePairs(nums, left, mid, temp);
+        int rightPairs = reversePairs(nums, mid + 1, right , temp);
+        if(nums[mid] <= nums[mid+1]) return leftPairs + rightPairs;
+        int crossPairs = mergeAndCount(nums, left, mid, right, temp);
+        return leftPairs + rightPairs + crossPairs;
+    }
+
+    private int mergeAndCount(int[] nums, int left, int mid, int right, int[] temp) {
+        int i = left,j = mid+1, k = left, count = 0;
+        while(i<=mid && j<=right) {
+            if(nums[i] <= nums[j]) {
+                temp[k++] = nums[i++];
+                count += j-(mid+1);
+            }
+            else {
+                temp[k++] = nums[j++];
+                //count += j-(mid+1);
+            }
+        }
+        while(i<=mid) {
+            temp[k++] = nums[i++];
+            count += j-(mid+1);
+        }
+        while(j<=right) {
+            temp[k++] = nums[j++];
+        }
+        for(k=left;k<=right;k++) {
+            nums[k] = temp[k];
+        }
+        return count;
+    }
+
+    //52
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode p = headA,q=headB;
+        while(p != q) {
+            p = p!=null ? p.next : headB;
+            q = q!=null ? q.next : headA;
+        }
+        return p;
     }
 
     //53-1
@@ -842,6 +927,32 @@ public class Solution {
             else l = mid+1;
         }
         return l;
+    }
+
+    //53
+    public int missingNumber(int[] nums) {
+        int i=0,j=nums.length-1;
+        while(i<=j) {
+            int m = (i+j)/2;
+            if(nums[m] == m) i = m+1;
+            else j=m-1;
+        }
+        return i;
+    }
+
+    //54
+    int res1,k;
+    public int kthLargest(TreeNode root, int k) {
+        this.k = k;
+        inorder(root);
+        return res1;
+    }
+
+    private void inorder(TreeNode root) {
+        if(root==null || k==0) return;
+        inorder(root.right);
+        if(--k == 0) res1 = root.val;
+        inorder(root.left);
     }
 
 }
