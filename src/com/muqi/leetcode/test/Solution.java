@@ -955,4 +955,48 @@ public class Solution {
         inorder(root.left);
     }
 
+    //55-1
+    public int maxDepth(TreeNode root) {
+        if(root == null) return 0;
+        if(root.left == null && root.right == null) return 1;
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+    //55-2
+    public boolean isBalanced(TreeNode root) {
+        if(root == null) return true;
+        if(!isBalanced(root.left) || !isBalanced(root.right)) return false;
+        if(Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1) return false;
+        return true;
+    }
+
+    //57-1   对撞双指针法
+    public int[] twoSum(int[] nums, int target) {
+        int i=0, j=nums.length-1;
+        while(i<j) {
+            if(nums[i]+nums[j] < target) i++;
+            else if(nums[i]+nums[j] > target) j--;
+            else return new int[]{nums[i], nums[j]};
+        }
+        return new int[0];
+    }
+
+    //57-2
+    public int[][] findContinuousSequence(int target) {
+        LinkedList<int[]> list = new LinkedList<>();
+        int i = 1;
+        while(target > 0) {
+            target -= i++;
+            if(target>0 && target%i==0) {
+                int[] nums = new int[i];
+                for(int k=target/i,j=0;k<target/i+i;k++,j++) {
+                    nums[j] = k;
+                }
+                list.add(nums);
+            }
+        }
+        Collections.reverse(list);
+        return list.toArray(new int[0][]);
+    }
+
 }
