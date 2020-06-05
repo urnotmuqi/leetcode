@@ -970,6 +970,37 @@ public class Solution {
         return true;
     }
 
+    //56-1  时间复杂度O(n),空间复杂度O(1)
+    public int[] singleNumbers(int[] nums) {
+        int x = 0;
+        for(int n : nums) {
+            x ^= n;
+        }
+        int a=0, b=0, val=1;
+        while((val&x) == 0) {
+            val <<= 1;
+        }
+        for(int n: nums) {
+            if((val&n) == 0) {
+                a ^= n;
+            }
+            else {
+                b ^= n;
+            }
+        }
+        return new int[] {a, b};
+    }
+
+    //56-2
+    public int singleNumber(int[] nums) {
+        int twos=0, ones=0;
+        for(int n : nums) {
+            ones = ones^n&~twos;
+            twos = twos^n&~ones;
+        }
+        return ones;
+    }
+
     //57-1   对撞双指针法
     public int[] twoSum(int[] nums, int target) {
         int i=0, j=nums.length-1;
@@ -997,6 +1028,25 @@ public class Solution {
         }
         Collections.reverse(list);
         return list.toArray(new int[0][]);
+    }
+
+    //58-1
+    public String reverseWords(String s) {
+        String[] strs = s.split(" ");
+        StringBuilder res = new StringBuilder();
+        for(int i=strs.length-1;i>=0;i--) {
+            if(strs[i].equals("")) continue;
+            res.append(strs[i] + " ");
+        }
+        return res.toString().trim();    //去除首尾空格
+    }
+
+    //58-2
+    public String reverseLeftWords(String s, int n) {
+        StringBuilder res = new StringBuilder();
+        res.append(s.substring(n,s.length()-n));
+        res.append(s.substring(0,n));
+        return res.toString();
     }
 
 }
