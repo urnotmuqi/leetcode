@@ -1049,4 +1049,106 @@ public class Solution {
         return res.toString();
     }
 
+    //59-1   双端队列
+    //方法一  1ms
+//    public int[] maxSlidingWindow(int[] nums, int k) {
+//        int len = nums.length;
+//        if (len == 0){
+//            return new int[0];
+//        }
+//        int[] res = new int[len-k+1];
+//        int index = -1,max = Integer.MIN_VALUE;
+//        for(int i=0;i<len-k+1;i++) {
+//            if(index >= i) {
+//                if(max<nums[i+k-1]) {
+//                    max = nums[i+k-1];
+//                    index = i+k-1;
+//                }
+//            }
+//            else {
+//                max = Integer.MIN_VALUE;
+//                for(int j=i;j<i+k;j++) {
+//                    if(max < nums[j]) {
+//                        max = nums[j];
+//                        index = j;
+//                    }
+//                }
+//            }
+//            res[i] = max;
+//        }
+//        return res;
+//    }
+
+    //方法二  14ms
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if(nums.length == 0 || k == 0) return new int[0];
+        Deque<Integer> deque = new LinkedList<>();
+        int[] res = new int[nums.length-k+1];
+        for(int i=0;i<k;i++) {
+            while(!deque.isEmpty() && deque.peekLast() < nums[i]) {
+                deque.removeLast();
+            }
+            deque.addLast(nums[i]);
+        }
+        res[0] = deque.peekFirst();
+        for(int i=k;i<nums.length;i++) {
+            if(deque.peekFirst() == nums[i-k]) deque.removeFirst();
+            while(!deque.isEmpty() && deque.peekLast() < nums[i]) {
+                deque.removeLast();
+            }
+            deque.addLast(nums[i]);
+            res[i-k+1] = deque.peekFirst();
+        }
+        return res;
+    }
+
+    //60
+    public double[] twoSum(int n) {
+        double[] res = {1/6d,1/6d,1/6d,1/6d,1/6d,1/6d};
+        for(int i=2;i<=n;i++) {
+            double[] temp = new double[5*i+1];
+            for(int j=0;j<res.length;j++) {
+                for(int x=0;x<6;x++) {
+                    temp[j+x] += res[j]/6;
+                }
+            }
+            res = temp;
+        }
+        return res;
+    }
+
+    //61
+    public boolean isStraight(int[] nums) {
+        Set<Integer> repeat = new HashSet<>();
+        int max=0, min = 14;
+        for(int i=0;i<5;i++) {
+            if(nums[i]==0) continue;
+            if(repeat.contains(nums[i])) return false;
+            repeat.add(nums[i]);
+            max = Math.max(max, nums[i]);
+            min = Math.min(min, nums[i]);
+        }
+        return max - min < 5;
+    }
+
+    //62
+    //递归
+//    public int lastRemaining(int n, int m) {
+//        return f(n, m);
+//    }
+//
+//    private int f(int n, int m) {
+//        if(n==1) return 0;
+//        int x = f(n-1, m);
+//        return (m+x)%n;
+//    }
+
+    //递归改为迭代
+    public int lastRemaining(int n, int m) {
+        int f=0;
+        for(int i=2;i<=n;i++) {
+            f = (m+f)%i;
+        }
+        return f;
+    }
 }
