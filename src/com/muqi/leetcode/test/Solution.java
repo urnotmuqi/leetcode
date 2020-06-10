@@ -1,6 +1,7 @@
 package com.muqi.leetcode.test;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import sun.reflect.generics.tree.Tree;
 
 import java.util.*;
@@ -1151,4 +1152,99 @@ public class Solution {
         }
         return f;
     }
+
+    //63
+    public int maxProfit(int[] prices) {
+        int res = 0,min = Integer.MAX_VALUE;
+        for(int price : prices) {
+            min = Math.min(min, price);
+            res = Math.max(res, price-min);
+        }
+        return res;
+    }
+
+    //64
+    public int sumNums(int n) {
+        boolean flag = n > 1 && (n+=sumNums(n-1)) >0;
+        return n;
+    }
+
+    //65
+    public int add(int a, int b) {
+        while(b!=0) {
+            int c = (a&b) << 1;
+            a = a^b;
+            b = c;
+        }
+        return a;
+    }
+
+    //66
+    public int[] constructArr(int[] a) {
+        if(a.length==0) return new int[0];
+        int[] b = new int[a.length];
+        int temp=1;
+        b[0]=1;
+        for(int i=1;i<a.length;i++) {
+            b[i] = b[i-1] * a[i-1];
+        }
+        for(int i=a.length-2;i>=0;i--) {
+            temp *= a[i+1];
+            b[i] *= temp;
+        }
+        return b;
+    }
+
+    //67
+    public int strToInt(String str) {
+        char[] chs = str.trim().toCharArray();
+        if(chs.length==0) return 0;
+        long res=0;
+        int flag=1,i=0;
+        if(chs[0]=='-') {
+            flag=-1;
+            i++;
+        }
+        else if(chs[0]=='+') i++;
+        for(;i<chs.length;i++) {
+            if(chs[i]>='0' && chs[i]<='9') {
+                res = chs[i]-'0' + res*10;
+                if(flag==1 && res > Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }
+                else if(flag==-1 && res*-1 < Integer.MIN_VALUE) {
+                    return Integer.MIN_VALUE;
+                }
+            }
+            else break;
+        }
+        if(flag==0) flag=1;
+        return (int)res*flag;
+    }
+
+    //68-1
+    public TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+        if(p.val > q.val) {
+            TreeNode t = p;
+            p = q;
+            q = t;
+        }
+        while(root != null) {
+            if(q.val<root.val) root = root.left;
+            else if(p.val > root.val) root = root.right;
+            else break;
+        }
+        return root;
+    }
+
+    //68-2
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null || root==p || root==q) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left==null) return right;
+        if(right==null) return left;
+        return root;
+    }
+
 }
